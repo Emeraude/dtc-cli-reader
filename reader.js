@@ -3,11 +3,11 @@
 var http = require('http');
 var color = require('cli-color');
 
-if (process.argv.length < 3
-    || !process.argv[2].match(/^\d{1,}$/)) {
-  console.error('Usage: ' + process.argv[1] + ' nb');
-  process.exit(1);
-}
+for (i in process.argv)
+  if (process.argv[i].match(/^(-h|--help)$/)) {
+    console.error('Usage: ' + process.argv[1] + ' [nb]');
+    process.exit(0);
+  }
 
 function displayQuote(quote) {
   var colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'black']
@@ -26,7 +26,7 @@ function displayQuote(quote) {
   }
 }
 
-http.get({host: 'broggit.me', path: '/quote/' + process.argv[2], port: 3001, methode: 'GET'}, function(r) {
+http.get({host: 'broggit.me', path: '/quote/' + (process.argv[2] || 'random'), port: 3001, methode: 'GET'}, function(r) {
   if (r.statusCode != 200) {
     console.error(r.statusMessage);
     process.exit(2);
