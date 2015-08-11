@@ -35,7 +35,6 @@ function displayQuote(quote) {
     console.log(color[pseudos[quote.content[i].login]].bold(quote.content[i].login) + quote.content[i].line);
   }
 
-  console.log(comments);
   if (comments != null) {
     console.log('------------------');
     for (i in quote.comments) {
