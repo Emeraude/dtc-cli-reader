@@ -1,6 +1,6 @@
 {
   "name": "dtc-cli-reader",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "'A simple cli quote reader for danstonchat.com, using DTCrawler API'",
   "main": "reader.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "homepage": "https://gitlab.com/Emeraude/dtc-cli-reader#README",
   "dependencies": {
-    "cli-color": "^1.0.0"
+    "cli-color": "^1.0.0",
+    "lodash": "^3.10.1"
   }
 }

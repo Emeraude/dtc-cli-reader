@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 var http = require('http');
+var _ = require('lodash');
 var color = require('cli-color');
 
 var host = 'broggit.me';
 var port = 3001;
-var comments = null;
+var commentsNb = null;
 var id = null;
 
 for (i in process.argv) {
@@ -14,13 +15,13 @@ for (i in process.argv) {
     process.exit(0);
   }
   if (process.argv[i].match(/^(-c|--comments)$/))
-    comments = -1;
+    commentsNb = -1;
   else if (process.argv[i].match(/^(-p|--port)$/))
     port = process.argv[++i];
   else if (process.argv[i] == '--host')
     host = process.argv[++i];
   else if (process.argv[i].match(/^--comments=/))
-    comments = parseInt(process.argv[i].substr(11));
+    commentsNb = parseInt(process.argv[i].substr(11));
   else
     id = parseInt(process.argv[i]);
 }
@@ -41,16 +42,20 @@ function displayQuote(quote) {
     console.log(color[pseudos[quote.content[i].login]].bold(quote.content[i].login) + quote.content[i].line);
   }
 
-  if (comments != null) {
+  if (commentsNb != null) {
+    var comments = _.sortBy(quote.comments, function(c) {
+      return c.votes.minus - c.votes.plus;
+    });
+
     console.log('------------------');
-    for (i in quote.comments) {
-      if (comments != -1 && parseInt(i) >= comments)
+    for (i in comments) {
+      if (commentsNb != -1 && parseInt(i) >= commentsNb)
 	break;
-      var msg = '#' + quote.comments[i].id + ' ';
-      if (quote.comments[i].author.name)
-	msg += color.black.bold(quote.comments[i].author.name) + ' ';
-      console.log(msg + color.green(quote.comments[i].votes.plus + '(+) ') + color.red(quote.comments[i].votes.minus + '(-)'));
-      content = quote.comments[i].content;
+      var msg = '#' + comments[i].id + ' ';
+      if (comments[i].author.name)
+	msg += color.black.bold(comments[i].author.name) + ' ';
+      console.log(msg + color.green(comments[i].votes.plus + '(+) ') + color.red(comments[i].votes.minus + '(-)'));
+      content = comments[i].content;
       while (content.match(/\n\n/))
 	content = content.replace(/\n\n/g, '\n');
       console.log(content);
