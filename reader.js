@@ -3,16 +3,22 @@
 var http = require('http');
 var color = require('cli-color');
 
+var host = 'broggit.me';
+var port = 3001;
 var comments = null;
 var id = null;
 
 for (i in process.argv) {
   if (process.argv[i].match(/^(-h|--help)$/)) {
-    console.error('Usage: ' + process.argv[1] + ' [nb] [-c|--comments=nb]');
+    console.error('Usage: ' + process.argv[1] + ' [-c|--comments=nb] [--host HOST] [-p|--port PORT] [nb]');
     process.exit(0);
   }
   if (process.argv[i].match(/^(-c|--comments)$/))
     comments = -1;
+  else if (process.argv[i].match(/^(-p|--port)$/))
+    port = process.argv[++i];
+  else if (process.argv[i] == '--host')
+    host = process.argv[++i];
   else if (process.argv[i].match(/^--comments=/))
     comments = parseInt(process.argv[i].substr(11));
   else
@@ -53,7 +59,7 @@ function displayQuote(quote) {
   }
 }
 
-http.get({host: 'broggit.me', path: '/quote/' + (id || 'random'), port: 3001, methode: 'GET'}, function(r) {
+http.get({host: host, path: '/quote/' + (id || 'random'), port: port, methode: 'GET'}, function(r) {
   if (r.statusCode != 200) {
     console.error(r.statusMessage);
     process.exit(2);
