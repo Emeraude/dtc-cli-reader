@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var http = require('http');
+var https = require('https');
 var _ = require('lodash');
 var color = require('cli-color');
 
-var host = 'broggit.me';
-var port = 3001;
+var host = 'dtc.rainbowda.sh';
+var port = 443;
 var commentsNb = null;
 var id = null;
 
@@ -64,7 +64,7 @@ function displayQuote(quote) {
   }
 }
 
-http.get({host: host, path: '/quote/' + (id || 'random'), port: port, methode: 'GET'}, function(r) {
+https.get({host: host, path: '/quote/' + (id || 'random'), port: port, methode: 'GET'}, function(r) {
   if (r.statusCode != 200) {
     console.error(r.statusMessage);
     process.exit(2);
